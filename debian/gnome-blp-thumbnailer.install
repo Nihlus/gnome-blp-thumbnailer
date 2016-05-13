@@ -1,0 +1,3 @@
+gnome-blp-thumbnailer/bin/Release/* /usr/lib/gnome-blp-thumbnailer/
+gnome/blp.thumbnailer /usr/share/thumbnailers/
+gnome/gnome-blp-thumbnailer /usr/bin/

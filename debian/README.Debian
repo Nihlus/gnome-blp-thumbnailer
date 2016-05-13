@@ -1,0 +1,6 @@
+gnome-blp-thumbnailer for Debian
+--------------------
+
+	* Added build scripts compatible with Debian.
+
+ -- Jarl Gullberg <jarl.gullberg@gmail.com>  Fri, 13 May 2016 15:46:03 +0200

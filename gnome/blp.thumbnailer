@@ -1,0 +1,4 @@
+[Thumbnailer Entry]
+TryExec=gnome-blp-thumbnailer
+Exec=gnome-blp-thumbnailer %s %i %o
+MimeType=image/vnd.blizzard-blp;

@@ -1,0 +1,2 @@
+#!/bin/bash
+mono /usr/lib/gnome-blp-thumbnailer/gnome-blp-thumbnailer.exe "$1" "$2" "$3"

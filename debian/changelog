@@ -1,0 +1,21 @@
+gnome-blp-thumbnailer (1.0.0.29263-1) trusty; urgency=medium
+
+  * Initial PPA release
+
+ -- Jarl Gullberg <jarl.gullberg@gmail.com>  Fri, 13 May 2016 16:15:26 +0200
+
+gnome-blp-thumbnailer (1.0.0.29186-1) trusty; urgency=medium
+
+  * Renamed some output build files
+  * Added README.md
+  * Fixes to the debian build files 
+  * Fixes to the build scripts
+  * Fixed invalid path in wrapper script
+
+ -- Jarl Gullberg <jarl.gullberg@gmail.com>  Fri, 13 May 2016 16:12:54 +0200
+
+gnome-blp-thumbnailer (1.0.0.28249-1) trusty; urgency=medium
+
+  * Initial release
+
+ -- Jarl Gullberg <jarl.gullberg@gmail.com>  Fri, 13 May 2016 15:54:12 +0200
