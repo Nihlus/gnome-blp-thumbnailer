@@ -5,9 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{5D881C0D-7B22-43FE-9423-A1C35A51D26E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>blpthumbnailer</RootNamespace>
-    <AssemblyName>blp-thumbnailer</AssemblyName>
+    <RootNamespace>BLPThumbnailer</RootNamespace>
+    <AssemblyName>gnome-blp-thumbnailer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Description>Thumbnail generator for the GNOME desktop environment which handles BLP image files.</Description>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\gnome-blp-thumbnailer.key</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +24,6 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -33,16 +35,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="libwarcraft, Version=1.0.1.22547, Culture=neutral, PublicKeyToken=35235ad96d247f26">
+      <Package>libwarcraft1.0</Package>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\libwarcraft\libwarcraft\libwarcraft.csproj">
-      <Project>{DA06A44E-A67B-46C7-B07D-E90AEBED0502}</Project>
-      <Name>libwarcraft</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

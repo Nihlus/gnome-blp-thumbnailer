@@ -20,12 +20,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.IO;
 using Warcraft.BLP;
 using System.Drawing;
+using System.Drawing.Imaging;
 
-namespace blpthumbnailer
+namespace BLPThumbnailer
 {
 	class MainClass
 	{
@@ -38,7 +38,7 @@ namespace blpthumbnailer
 			BLP image = new BLP(File.ReadAllBytes(imagePath));
 			Bitmap thumbnail = image.GetBestMipMap(uint.Parse(desiredSize));
 
-			thumbnail.Save(outputPath, System.Drawing.Imaging.ImageFormat.Png);		
+			thumbnail.Save(outputPath, ImageFormat.Png);		
 		}
 	}
 }
