@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gnome-blp-thumbnailer", "gnome-blp-thumbnailer\gnome-blp-thumbnailer.csproj", "{5D881C0D-7B22-43FE-9423-A1C35A51D26E}"
