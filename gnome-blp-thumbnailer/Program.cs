@@ -38,7 +38,7 @@ namespace BLPThumbnailer
 			BLP image = new BLP(File.ReadAllBytes(imagePath));
 			Bitmap thumbnail = image.GetBestMipMap(uint.Parse(desiredSize));
 
-			thumbnail.Save(outputPath, ImageFormat.Png);		
+			thumbnail.Save(outputPath, ImageFormat.Png);
 		}
 	}
 }

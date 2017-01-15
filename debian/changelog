@@ -1,3 +1,16 @@
+gnome-blp-thumbnailer (1.0.0.29589-1) trusty; urgency=medium
+
+  * Added dependency on blizzard-mime-types
+
+ -- Jarl Gullberg <jarl.gullberg@gmail.com>  Fri, 13 May 2016 16:26:19 +0200
+
+gnome-blp-thumbnailer (1.0.0.29493-1) trusty; urgency=medium
+
+  * Fixed package dependency error (no dependency on libwarcraft)
+  * Fixed specific version requirement for thumbnailer project
+
+ -- Jarl Gullberg <jarl.gullberg@gmail.com>  Fri, 13 May 2016 16:23:07 +0200
+
 gnome-blp-thumbnailer (1.0.0.29263-1) trusty; urgency=medium
 
   * Initial PPA release

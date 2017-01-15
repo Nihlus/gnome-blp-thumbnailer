@@ -17,7 +17,9 @@ Package: gnome-blp-thumbnailer
 Section: misc
 Architecture: any
 Depends: ${cli:Depends}, 
-	${misc:Depends}, 
+	${misc:Depends},
+	libwarcraft1.0-cli (>= 1.0),
+	blizzard-mime-types (>= 1.0)
 Description: Thumbnail generator for BLP image files.
  This program generates thumbnails for the GNOME desktop environment
  for binary BLP images.

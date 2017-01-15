@@ -14,7 +14,7 @@ LOG_PREFIX_ORANGE="${ORANGE}[THUMBNAILER]:"
 LOG_PREFIX_RED="${RED}[THUMBNAILER]:"
 LOG_SUFFIX='\033[0m'
 
-echo -e "$LOG_PREFIX Building Release configuration of THUMBNAILER... $LOG_SUFFIX"
+echo -e "$LOG_PREFIX Building Release configuration of gnome-blp-thumbnailer... $LOG_SUFFIX"
 BUILDSUCCESS=$(xbuild /p:Configuration="Release" "$THUMBNAILER_ROOT/gnome-blp-thumbnailer.sln"  | grep "Build succeeded.")
 
 if [[ ! -z $BUILDSUCCESS ]]; then

@@ -35,8 +35,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="libwarcraft, Version=1.0.1.22547, Culture=neutral, PublicKeyToken=35235ad96d247f26">
+    <Reference Include="libwarcraft, Version=1.0.1.24181, Culture=neutral, PublicKeyToken=35235ad96d247f26">
       <Package>libwarcraft1.0</Package>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
   <ItemGroup>
