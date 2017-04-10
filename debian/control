@@ -1,15 +1,13 @@
 Source: gnome-blp-thumbnailer
 Priority: optional
 Maintainer: Jarl Gullberg <jarl.gullberg@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), 
+Build-Depends: debhelper (>= 9), 
 	cli-common-dev (>= 0.8),
 	libmono-cil-dev,
 	mono-mcs (>= 3.0),
 	mono-devel (>= 2.4.2.3),
-	mono-xbuild,
-	libwarcraft1.0-cli (>= 1.0),
-	libwarcraft1.0-cli-dev (>= 1.0)
-Standards-Version: 3.9.5
+	mono-xbuild
+Standards-Version: 3.9.7
 Section: misc
 Homepage: https://github.com/Nihlus/gnome-blp-thumbnailer
 
@@ -18,7 +16,6 @@ Section: misc
 Architecture: any
 Depends: ${cli:Depends}, 
 	${misc:Depends},
-	libwarcraft1.0-cli (>= 1.0),
 	blizzard-mime-types (>= 1.0)
 Description: Thumbnail generator for BLP image files.
  This program generates thumbnails for the GNOME desktop environment

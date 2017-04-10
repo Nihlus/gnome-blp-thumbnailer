@@ -1,0 +1,3 @@
+[submodule "lib/libwarcraft"]
+	path = lib/libwarcraft
+	url = https://github.com/WowDevTools/libwarcraft.git

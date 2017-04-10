@@ -27,7 +27,7 @@ using System.Drawing.Imaging;
 
 namespace BLPThumbnailer
 {
-	class MainClass
+	internal class MainClass
 	{
 		public static void Main(string[] args)
 		{

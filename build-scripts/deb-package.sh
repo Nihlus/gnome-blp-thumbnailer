@@ -3,52 +3,113 @@
 # Move to the base folder where the script is located.
 cd $(dirname $0)
 
-THUMBNAILER_ROOT=$(readlink -f "..")
-OUTPUT_ROOT="$THUMBNAILER_ROOT/release"
+PROGRAM_ROOT=$(readlink -f "..")
+OUTPUT_ROOT="$PROGRAM_ROOT/release"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 ORANGE='\033[0;33m'
-LOG_PREFIX="${GREEN}[THUMBNAILER]:"
-LOG_PREFIX_ORANGE="${ORANGE}[THUMBNAILER]:"
-LOG_PREFIX_RED="${RED}[THUMBNAILER]:"
+LOG_PREFIX="${GREEN}[gnome-blp-thumbnailer]:"
+LOG_PREFIX_ORANGE="${ORANGE}[gnome-blp-thumbnailer]:"
+LOG_PREFIX_RED="${RED}[gnome-blp-thumbnailer]:"
 LOG_SUFFIX='\033[0m'
 
-echo -e "$LOG_PREFIX Building Release configuration of gnome-blp-thumbnailer... $LOG_SUFFIX"
-BUILDSUCCESS=$(xbuild /p:Configuration="Release" "$THUMBNAILER_ROOT/gnome-blp-thumbnailer.sln"  | grep "Build succeeded.")
+PROGRAM_NAME="gnome-blp-thumbnailer"
+BINARY_EXTENSION="exe"
+
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, $(getopt --test) failed in this environment."
+    exit 1
+fi
+
+SHORTOPTS=k:v
+LONGOPTS=key:,verbose
+
+PARSED=$(getopt --options $SHORTOPTS --longoptions $LONGOPTS --name "$0" -- "$@")
+
+if [[ $? -ne 0 ]]; then
+    # e.g. $? == 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+
+# use eval with "$PARSED" to properly handle the quoting
+eval set -- "$PARSED"
+
+# now enjoy the options in order and nicely split until we see --
+while true; do
+    case "$1" in
+        -v|--verbose)
+            VERBOSE=y
+            shift
+            ;;
+        -y|--always-yes)
+            ALWAYSYES=y
+            shift
+            ;;
+        -k|--key)
+            SIGNINGKEY="$2"
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
+# handle non-option arguments
+if [ -v $SIGNINGKEY ]; then
+    echo "$0: A signing key is required."
+    exit 4
+fi
+
+echo -e "$LOG_PREFIX Building Release configuration of $PROGRAM_NAME... $LOG_SUFFIX"
+
+BUILDSUCCESS=$(xbuild /p:Configuration="Release" "$PROGRAM_ROOT/$PROGRAM_NAME.sln"  | grep "Build succeeded.")
 
 if [[ ! -z $BUILDSUCCESS ]]; then
 	echo "Build succeeded. Copying files and building package."
 	# The library builds, so we can proceed
-	THUMBNAILER_ASSEMBLY_VERSION=$(monodis --assembly "$THUMBNAILER_ROOT/gnome-blp-thumbnailer/bin/Release/gnome-blp-thumbnailer.exe" | grep Version | egrep -o '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*d*')
-	THUMBNAILER_MAJOR_VERSION=$(echo "$THUMBNAILER_ASSEMBLY_VERSION" | awk -F \. {'print $1'})
-	THUMBNAILER_MINOR_VERSION=$(echo "$THUMBNAILER_ASSEMBLY_VERSION" | awk -F \. {'print $2'})
+	PROGRAM_ASSEMBLY_VERSION=$(monodis --assembly "$PROGRAM_ROOT/$PROGRAM_NAME/bin/Release/$PROGRAM_NAME.$BINARY_EXTENSION" | grep Version | egrep -o '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*d*')
+	PROGRAM_MAJOR_VERSION=$(echo "$PROGRAM_ASSEMBLY_VERSION" | awk -F \. {'print $1'})
+	PROGRAM_MINOR_VERSION=$(echo "$PROGRAM_ASSEMBLY_VERSION" | awk -F \. {'print $2'})
 
-	THUMBNAILER_VERSIONED_NAME="gnome-blp-thumbnailer-$THUMBNAILER_ASSEMBLY_VERSION"
-	THUMBNAILER_TARBALL_NAME="gnome-blp-thumbnailer_$THUMBNAILER_ASSEMBLY_VERSION"
-	THUMBNAILER_DEBUILD_ROOT="$OUTPUT_ROOT/$THUMBNAILER_VERSIONED_NAME"
+	PROGRAM_VERSIONED_NAME="$PROGRAM_NAME-$PROGRAM_ASSEMBLY_VERSION"
+	PROGRAM_TARBALL_NAME="${PROGRAM_NAME,,}"_"$PROGRAM_ASSEMBLY_VERSION"
+	PROGRAM_DEBUILD_ROOT="$OUTPUT_ROOT/$PROGRAM_VERSIONED_NAME"
 	
 	# Update Debian changelog
-	cd $THUMBNAILER_ROOT
-	dch -v $THUMBNAILER_ASSEMBLY_VERSION-1
+	cd $PROGRAM_ROOT
+	dch -v $PROGRAM_ASSEMBLY_VERSION-1
 	cd - > /dev/null
 
-	if [ ! -d "$THUMBNAILER_DEBUILD_ROOT" ]; then
+	if [ ! -d "$PROGRAM_DEBUILD_ROOT" ]; then
 		# Clean the sources
-		rm -rf "$THUMBNAILER_ROOT/gnome-blp-thumbnailer/bin"
-		rm -rf "$THUMBNAILER_ROOT/gnome-blp-thumbnailer/obj"
+		rm -rf "$PROGRAM_ROOT/$PROGRAM_NAME/bin"
+		rm -rf "$PROGRAM_ROOT/$PROGRAM_NAME/obj"
 	
 		# Copy the sources to the build directory
-		mkdir -p "$THUMBNAILER_DEBUILD_ROOT"
-		cp -r "$THUMBNAILER_ROOT/debian/" $THUMBNAILER_DEBUILD_ROOT
-		cp -r "$THUMBNAILER_ROOT/gnome/" $THUMBNAILER_DEBUILD_ROOT
-		cp -r "$THUMBNAILER_ROOT/gnome-blp-thumbnailer/" $THUMBNAILER_DEBUILD_ROOT
-		cp "$THUMBNAILER_ROOT/"* "$THUMBNAILER_DEBUILD_ROOT"
+		mkdir -p "$PROGRAM_DEBUILD_ROOT"
+		cp -r "$PROGRAM_ROOT/debian/" $PROGRAM_DEBUILD_ROOT
+		cp -r "$PROGRAM_ROOT/lib/" $PROGRAM_DEBUILD_ROOT
+		cp -r "$PROGRAM_ROOT/gnome/" $PROGRAM_DEBUILD_ROOT
+		cp -r "$PROGRAM_ROOT/$PROGRAM_NAME/" $PROGRAM_DEBUILD_ROOT
+		cp "$PROGRAM_ROOT/"* "$PROGRAM_DEBUILD_ROOT"
+
+		# Pull in the NuGet dependencies
+		echo -e "$LOG_PREFIX_ORANGE Pulling in NuGet dependencies... $LOG_SUFFIX"
+		nuget restore "$PROGRAM_DEBUILD_ROOT/$PROGRAM_NAME.sln"
 
 		# Create an *.orig.tar.xz archive if one doesn't exist already
-		ORIG_TAR="$OUTPUT_ROOT/$THUMBNAILER_TARBALL_NAME.orig.tar.xz"
+		ORIG_TAR="$OUTPUT_ROOT/$PROGRAM_TARBALL_NAME.orig.tar.xz"
 		if [ ! -f "$ORIG_TAR" ]; then
-			cd "$THUMBNAILER_DEBUILD_ROOT/"
+			cd "$PROGRAM_DEBUILD_ROOT/"
 			tar -cJf "$ORIG_TAR" "."
 			cd - > /dev/null
 		fi
@@ -56,10 +117,11 @@ if [[ ! -z $BUILDSUCCESS ]]; then
 		# Build the debian package
 		read -p "Ready to build the debian package. Continue? [y/N] " -n 1 -r
 		echo
-		if [[ $REPLY =~ ^[Yy]$ ]]
+
+		if [[ $REPLY =~ ^[Yy]$ ]] || [[ ! -z $ALWAYSYES ]]
 		then
-			cd "$THUMBNAILER_DEBUILD_ROOT"
-			debuild -S -k28C56D2F
+			cd "$PROGRAM_DEBUILD_ROOT"
+			debuild -S -k$SIGNINGKEY
 		fi							
 	fi
 else
